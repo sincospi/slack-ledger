@@ -19,5 +19,10 @@ Initialize: `npm install`
 
 For production, environment variables are set in `env.yaml` (Duplicate `env.sample.yaml` into `env.yaml`).
 
-`sls deploy`
-`sls logs -f app -t`
+```
+sls deploy
+```
+
+```
+sls logs -f app -t
+```
