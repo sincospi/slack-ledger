@@ -13,7 +13,7 @@ require('./src/mongooseConnect');
 // Middleware
 const customisedBodyParser = require('./src/middleware/bodyParser');
 const logRawRequestBody = require('./src/middleware/logRawRequestBody');
-const verifySlackRequestSignature = require('./src/middleware/verifySlackRequestSignature');
+const verifySlackRequest = require('./src/middleware/verifySlackRequest');
 const setRequestDomain = require('./src/middleware/setRequestDomain');
 const setRequestUser = require('./src/middleware/setRequestUser');
 const setRequestTextParams = require('./src/middleware/setRequestTextParams');
@@ -29,7 +29,7 @@ app.use(logRawRequestBody);
 app.use(setRequestDomain);
 if (config[process.env.NODE_ENV].shouldVerifySlackRequest) {
   console.log('Slack request verification is ENABLED');
-  app.use(verifySlackRequestSignature);
+  app.use(verifySlackRequest);
 } else {
   console.log('Slack request verification is DISABLED');
 }

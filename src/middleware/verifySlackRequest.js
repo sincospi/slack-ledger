@@ -3,9 +3,9 @@ const timingSafeCompare = require('tsscmp');
 
 const config = require('../../config');
 
-module.exports = function verifySlackRequestSignature(req, res, next) {
+module.exports = function verifySlackRequest(req, res, next) {
   const { headers, rawBody } = req;
-  const oauthAccessToken = config.slackWorkgroupAccessToken[req.domain];
+  const oauthAccessToken = config.slackClientSecret[req.domain];
   if (!oauthAccessToken) {
     return next(
       new Error(`No slack oauth access token for domain ${req.domain}`),

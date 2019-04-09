@@ -15,15 +15,17 @@ const production = {
 
 /**
  * A single server can serve multiple slack workgroups
- * The following dictionary holds access tokens per workgroup domain
+ * The following dictionary holds Client (signing) secrets per workgroup domain
+ * key: workgroup domain name
+ * value: slack client signing secret
  */
-const slackWorkgroupAccessToken = {
-  'workgroup-domain-name': 'slack-oauth-access-token',
+const slackClientSecret = {
+  'workgroup-domain-name': 'slack-client-signing-secret',
 };
 
 module.exports = {
   test,
   development,
   production,
-  slackWorkgroupAccessToken,
+  slackClientSecret,
 };
