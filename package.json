@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "NODE_ENV=development node server.js",
+    "start": "NODE_ENV=development node server.js",
     "test": "NODE_ENV=test mocha './src/**/*.test.js'",
     "mocha": "mocha"
   },
@@ -15,7 +15,6 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.20",
-    "node-yaml-config": "0.0.5",
     "serverless-http": "^1.9.1",
     "tsscmp": "^1.0.6"
   },

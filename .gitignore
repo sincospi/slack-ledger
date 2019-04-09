@@ -5,5 +5,5 @@ jspm_packages
 # Serverless directories
 .serverless
 
-env.yaml
+config.js
 .vscode

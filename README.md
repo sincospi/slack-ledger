@@ -5,9 +5,16 @@ An app to keep track of unresolved financial transactions between workspace user
 Initialize: `npm install`
 
 
+# Env Variables and Config
+
+The top level env variable is NODE_ENV. It is set inline for test and development scripts (see package.json) and inside serverless.yaml for production.
+
+All remaining configuration is obtained from `config.js` (see `config.sample.js` template).
+
+
 # Development
 
-`npm run serve`
+`npm run start`
 
 
 # Testing
@@ -15,14 +22,14 @@ Initialize: `npm install`
 `npm run test`
 
 
-# Deployment
-
-For production, environment variables are set in `env.yaml` (Duplicate `env.sample.yaml` into `env.yaml`).
+# Deployment: AWS Lambda (via serverless framework)
 
 ```
-sls deploy
+serverless deploy --stage production --region eu-central-1
 ```
 
 ```
-sls logs -f app -t
+sls logs -f app -t --stage production --region eu-central-1
 ```
+
+Note: If your shell has multiple aws profiles defined, prepend your commands with `AWS_PROFILE=yourchoosenprofile`

@@ -1,8 +1,16 @@
 const crypto = require('crypto');
 const timingSafeCompare = require('tsscmp');
 
+const config = require('../../config');
+
 module.exports = function verifySlackRequestSignature(req, res, next) {
   const { headers, rawBody } = req;
+  const oauthAccessToken = config.slackWorkgroupAccessToken[req.domain];
+  if (!oauthAccessToken) {
+    return next(
+      new Error(`No slack oauth access token for domain ${req.domain}`),
+    );
+  }
   const timestamp = headers['x-slack-request-timestamp'];
   const slackSignature = headers['x-slack-signature'];
   let version;
@@ -11,17 +19,14 @@ module.exports = function verifySlackRequestSignature(req, res, next) {
   }
 
   const sigBaseString = [version, timestamp, rawBody].join(':');
-  const hmac = crypto.createHmac(
-    'sha256',
-    process.env.SLACK_OAUTH_ACCESS_TOKEN,
-  );
+  const hmac = crypto.createHmac('sha256', oauthAccessToken);
   hmac.update(sigBaseString);
   const mySignature = `${version}=${hmac.digest('hex')}`;
 
   if (timingSafeCompare(mySignature, slackSignature)) {
-    next();
-  } else {
-    console.debug('Access Denied');
-    res.sendStatus(401);
+    return next();
   }
+
+  console.debug('Access Denied');
+  return res.sendStatus(401);
 };

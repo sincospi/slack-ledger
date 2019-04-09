@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
-console.log(
-  'Mongoose connecting to database:',
-  process.env.DB_URI.split('/').pop(),
-);
+const config = require('../config');
+
+const { dbUri } = config[process.env.NODE_ENV];
+
+console.log('Mongoose connecting to database:', dbUri.split('/').pop());
 
 mongoose.connect(
-  process.env.DB_URI,
+  dbUri,
   {
     useNewUrlParser: true,
     useCreateIndex: true,

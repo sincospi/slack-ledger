@@ -1,7 +1,13 @@
 const express = require('express');
 const serverless = require('serverless-http');
 
-require('./src/setYamlEnvVariables');
+if (process.env.NODE_ENV) {
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+} else {
+  throw new Error('process.env.NODE_ENV is not defined!');
+}
+
+const config = require('./config');
 require('./src/mongooseConnect');
 
 // Middleware
@@ -20,13 +26,13 @@ const handleSlackRequest = require('./src/handleSlackRequest');
 const app = express();
 app.use(customisedBodyParser);
 app.use(logRawRequestBody);
-if (process.env.SKIP_VERIFY_SLACK_REQUEST === 'true') {
-  console.log('Slack request verification is DISABLED');
-} else {
+app.use(setRequestDomain);
+if (config[process.env.NODE_ENV].shouldVerifySlackRequest) {
   console.log('Slack request verification is ENABLED');
   app.use(verifySlackRequestSignature);
+} else {
+  console.log('Slack request verification is DISABLED');
 }
-app.use(setRequestDomain);
 app.use(setRequestUser);
 app.use(setRequestTextParams);
 app.use(logRequest);
