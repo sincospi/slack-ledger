@@ -1,4 +1,4 @@
-// const expect = require('expect.js');
+const expect = require('expect.js');
 
 const User = require('../models/user.model');
 const Transaction = require('../models/transaction.model');
@@ -27,13 +27,18 @@ describe('newTransactionsFormatter', () => {
     });
   });
 
-  it('should format transactions', () => {
+  it('should render number of records saved and include these records', () => {
     const transactions = [x.t1, x.t2];
     const responseObj = newTransactionsFormatter(transactions);
     console.log('responseObj', responseObj);
+    expect(responseObj.text).to.be('2 records saved');
+    expect(responseObj.attachments.length).to.eql(2);
+  });
 
-    // const { text, attachments } = responseObj;
-    // expect(text).to.be('2 records saved');
-    // expect(attachments).to.not.be.empty();
+  it('should not render attachments if transactions arr is empty', () => {
+    const transactions = [];
+    const responseObj = newTransactionsFormatter(transactions);
+    expect(responseObj.text).to.be('0 records saved');
+    expect(responseObj.attachments).to.be(undefined);
   });
 });

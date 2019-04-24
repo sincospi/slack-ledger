@@ -3,15 +3,18 @@ const Transaction = require('../models/transaction.model');
 module.exports = async function createTransactions(
   domain,
   reqUser,
-  perUserAmount,
+  userAmountPairs,
   description,
 ) {
   if (!description) {
     throw new Error('Missing `description`');
   }
 
-  const allTransactions = perUserAmount.map(t => {
+  const allTransactions = userAmountPairs.map(t => {
     const { user, amount } = t;
+    if (user.slackId === reqUser.slackId) {
+      return null; // null transaction if other user is also self
+    }
     let debtor;
     let creditor;
     if (amount > 0) {
@@ -28,7 +31,7 @@ module.exports = async function createTransactions(
       amount: Math.abs(amount),
       description,
     });
-  });
+  }).filter(Boolean); // Discards any null transaction
 
   await Promise.all(allTransactions.map(t => t.save()));
 

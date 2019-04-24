@@ -6,7 +6,8 @@ module.exports = function newTransactionsFormatter(transactions) {
     text: `${transactions.length} records saved`,
   };
 
-  payload.attachments = transactions
+  if (transactions.length) {
+    payload.attachments = transactions
     .map(t => {
       const { debtor, creditor, amount } = t;
       return `${debtor.encodedName} owes ${
@@ -14,5 +15,7 @@ module.exports = function newTransactionsFormatter(transactions) {
       } ${toCurrencyStr(amount)}`;
     })
     .map(text => ({ text }));
+  }
+
   return payload;
 };

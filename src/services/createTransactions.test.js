@@ -68,4 +68,22 @@ describe('createTransactions Service', () => {
     expect(transactions[1].debtor.slackId).to.be('3');
     expect(transactions[1].amount).to.be(3);
   });
+
+  it('should ignore transaction with self', async () => {
+    const userAmount1 = {
+      user: x.u2,
+      amount: 2,
+    };
+    const userAmountSelf = {
+      user: x.u1,
+      amount: 1,
+    };
+    const transactions = await createTransactions(
+      x.domain,
+      x.u1,
+      [userAmount1, userAmountSelf],
+      'test transactions invlolving self',
+    );
+    expect(transactions.length).to.be(1);
+  });
 });
