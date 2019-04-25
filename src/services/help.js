@@ -1,4 +1,5 @@
 const helpText = [
+  '*Usage instructions:*',
   'Use `/ledger` to see your debt/credit with respect to all other users.',
   'Use `/ledger @user` to see latest transactions with particular @user.',
   'Use `/ledger @user amount description` to create a new record indicating debt/credit between yourself and another @user.',

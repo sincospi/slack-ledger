@@ -20,12 +20,13 @@ describe('balanceFormatter', () => {
     ];
   });
 
-  it('should format per user balance', () => {
+  it('should render per user balance', () => {
     const responseObj = balanceFormatter(x.perUserBalance);
-    console.log(responseObj);
-    // const { attachments } = responseObj;
-    // expect(attachments.length).to.be(2);
-    // expect(attachments[0].text).to.be('<@1|u1> owes you 1.00 €');
-    // expect(attachments[1].text).to.be('You owe <@2|u2> 3.00 €');
+    console.log(JSON.stringify(responseObj));
+  });
+
+  it('should inform if no transactions exist', () => {
+    const responseObj = balanceFormatter([]);
+    console.log(JSON.stringify(responseObj));
   });
 });

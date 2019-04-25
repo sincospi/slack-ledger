@@ -20,7 +20,7 @@ describe('newTransactionsFormatter', () => {
       debtor: x.u1,
       creditor: x.u2,
       amount: 2,
-      description: 'transaction 1',
+      description: 'ordering food',
     });
     x.t2 = new Transaction({
       domain,
@@ -28,22 +28,23 @@ describe('newTransactionsFormatter', () => {
       debtor: x.u3,
       creditor: x.u1,
       amount: 3,
-      description: 'transaction 2',
+      description: 'ordering food',
     });
   });
 
   it('should render number of records saved and include these records', () => {
     const transactions = [x.t1, x.t2];
     const responseObj = newTransactionsFormatter(transactions);
-    console.log('responseObj', responseObj);
-    expect(responseObj.text).to.be('2 records saved');
-    expect(responseObj.attachments.length).to.eql(2);
+    console.log('responseObj', JSON.stringify(responseObj));
+    expect(responseObj.blocks.length).to.eql(3);
+    expect(responseObj.blocks[0].text.text).to.be('2 records saved');
   });
 
   it('should not render attachments if transactions arr is empty', () => {
     const transactions = [];
     const responseObj = newTransactionsFormatter(transactions);
-    expect(responseObj.text).to.be('0 records saved');
-    expect(responseObj.attachments).to.be(undefined);
+    console.log('responseObj', JSON.stringify(responseObj));
+    expect(responseObj.blocks.length).to.eql(1);
+    expect(responseObj.blocks[0].text.text).to.be('0 records saved');
   });
 });

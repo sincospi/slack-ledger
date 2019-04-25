@@ -1,21 +1,32 @@
-const toCurrencyStr = require('./currencyFormatter');
+const { 
+  toCurrencyStr,
+  formatAsBold,
+  formatAsCode,
+  blockSection, 
+  inChannelResponse, 
+} = require('./slackFormaters');
 
 module.exports = function newTransactionsFormatter(transactions) {
-  const payload = {
-    response_type: 'in_channel',
-    text: `${transactions.length} records saved`,
-  };
+  let blocks = [];
+  let text;
+
+  text = `${transactions.length} records saved`;
+  blocks.push(blockSection(text));
 
   if (transactions.length) {
-    payload.attachments = transactions
+    const transactionBlocks = transactions
     .map(t => {
-      const { debtor, creditor, amount } = t;
-      return `${debtor.encodedName} owes ${
-        creditor.encodedName
-      } ${toCurrencyStr(amount)}`;
-    })
-    .map(text => ({ text }));
+      const { debtor, creditor, amount, description } = t;
+      text = `${debtor.encodedName} owes `;
+      text += formatAsCode(toCurrencyStr(amount));
+      text += ` to ${creditor.encodedName}`;
+      text = formatAsBold(text);
+      text += `, for ${description}`;
+      return blockSection(text);
+    });
+
+    blocks = blocks.concat(transactionBlocks);
   }
 
-  return payload;
+  return inChannelResponse(blocks);
 };
