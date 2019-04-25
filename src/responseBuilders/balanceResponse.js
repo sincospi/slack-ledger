@@ -4,14 +4,14 @@ const {
   formatAsBold,
   blockSection,
   blockContext,
-  ephemeralResponse,
-} = require('./slackFormaters');
+} = require('../formatters/slackFormatters');
+const { ephemeralResponse } = require('./slackResponses');
 
-module.exports = function balanceFormatter(perUserBalance) {
+module.exports = function balanceResponse(balanceWithUsers) {
   let blocks = [];
   let text;
 
-  if (!perUserBalance.length) {
+  if (!balanceWithUsers.length) {
     text = formatAsBold(
       'Your balance with all users is zero. Go make some transactions :)',
     );
@@ -20,12 +20,14 @@ module.exports = function balanceFormatter(perUserBalance) {
   }
 
   text = 'Your balance with respect to every other user:';
-  blocks.push(blockSection(text));
-  
-  const perUserBalanceBlocks = perUserBalance
+  blocks.push(blockContext(text));
+
+  const perUserBalanceBlocks = balanceWithUsers
     .filter(bal => !bal.amount.eq(0))
     .map(bal => {
-      text = `Your balance with ${bal.user.encodedName} is ${formatAsCode(toCurrencyStr(bal.amount))}`;
+      text = `Your balance with ${bal.user.encodedName} is ${formatAsCode(
+        toCurrencyStr(bal.amount),
+      )}`;
       if (bal.amount.gt(0)) {
         text += ' (they owe you)';
       } else {
@@ -37,8 +39,10 @@ module.exports = function balanceFormatter(perUserBalance) {
 
   blocks = blocks.concat(perUserBalanceBlocks);
 
-  text = `Use ${formatAsCode('/ledger @user')} to see all transactions with that user`;
-  if (perUserBalance.length) {
+  text = `Use ${formatAsCode(
+    '/ledger @user',
+  )} to see all transactions with that user`;
+  if (balanceWithUsers.length) {
     blocks.push(blockContext(text));
   }
 

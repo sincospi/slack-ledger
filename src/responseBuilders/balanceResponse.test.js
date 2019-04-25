@@ -2,13 +2,14 @@
 const Big = require('big.js');
 
 const User = require('../models/user.model');
+const Transaction = require('../models/transaction.model');
 
-const balanceFormatter = require('./balanceFormatter');
+const balanceResponse = require('./balanceResponse');
 
 const x = {}; // fixtures object
 x.domain = 'test';
 
-describe('balanceFormatter', () => {
+describe('balanceResponse', () => {
   beforeEach(async () => {
     [x.u1, x.u2, x.u3] = ['<@1|u1>', '<@2|u2>', '<@3|u3>'].map(
       u => new User(User.fromEncodedName(x.domain, u)),
@@ -21,12 +22,12 @@ describe('balanceFormatter', () => {
   });
 
   it('should render per user balance', () => {
-    const responseObj = balanceFormatter(x.perUserBalance);
+    const responseObj = balanceResponse(x.perUserBalance);
     console.log(JSON.stringify(responseObj));
   });
 
   it('should inform if no transactions exist', () => {
-    const responseObj = balanceFormatter([]);
+    const responseObj = balanceResponse([]);
     console.log(JSON.stringify(responseObj));
   });
 });

@@ -39,6 +39,27 @@ Transaction.prototype.isDebtForUser = function isCreditForUser(user) {
   return this.debtor.id === user.id;
 };
 
+Transaction.prototype.signedAmountForUser = function signedAmountForUser(user) {
+  if (this.isDebtForUser(user)) {
+    return Big(this.amount).times(-1);
+  }
+  if (this.isCreditForUser(user)) {
+    return Big(this.amount);
+  }
+  // If transaction does not mention user
+  return Big(0);
+};
+
+Transaction.prototype.effectedUser = function effectedUser() {
+  if (!this.creator) {
+    return null;
+  }
+  if (this.creator.id === this.debtor.id) {
+    return this.creditor;
+  }
+  return this.debtor;
+};
+
 /**
  * @param user
  * @param transactionList - list of transactions (that include user as debtor or creditor)?
@@ -51,10 +72,11 @@ Transaction.balanceForUser = function balanceForUser(user, transactionList) {
     if (t.isDebtForUser(user)) {
       return sum.minus(t.amount);
     }
+    // if user Not mentioned in transaction, skip it...
+    return sum;
     // throw new Error(
     //   'All transactions provided to balanceForUser should include user as creditor or debtor!',
     // );
-    return sum;
   }, Big(0));
 };
 

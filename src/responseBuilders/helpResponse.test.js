@@ -1,9 +1,9 @@
 const helpText = require('../services/help');
-const helpFormatter = require('./helpFormatter');
+const helpResponse = require('./helpResponse');
 
-describe('helpFormatter', () => {
+describe('helpResponse', () => {
   it('should render the help text', () => {
-    const responseObj = helpFormatter(helpText);
+    const responseObj = helpResponse(helpText);
     console.log(JSON.stringify(responseObj));
   });
 });

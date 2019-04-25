@@ -1,7 +1,11 @@
 const User = require('../models/user.model');
 const Transaction = require('../models/transaction.model');
 
-module.exports = async function list(domain, reqUser, otherUser) {
+module.exports = async function transactionsWithUser(
+  domain,
+  reqUser,
+  otherUser,
+) {
   const q = {
     domain,
     $or: [

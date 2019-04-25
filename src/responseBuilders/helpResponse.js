@@ -1,7 +1,5 @@
-const {
-  blockSection,
-  ephemeralResponse,
-} = require('./slackFormaters');
+const { blockSection } = require('../formatters/slackFormatters');
+const { ephemeralResponse } = require('./slackResponses');
 
 module.exports = function helpFormater(text) {
   const blocks = [];

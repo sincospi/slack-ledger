@@ -2,31 +2,32 @@ const User = require('./models/user.model');
 
 const helpText = require('./services/help');
 const balance = require('./services/balance.js');
+const lastTransactions = require('./services/lastTransactions');
 const createTransactions = require('./services/createTransactions.js');
-const list = require('./services/list.js');
+const transactionsWithUser = require('./services/transactionsWithUser');
 
-const helpFormatter = require('./responseFormatters/helpFormatter');
-const balanceFormatter = require('./responseFormatters/balanceFormatter');
-const newTransactionFormatter = require('./responseFormatters/newTransactionsFormatter');
-const listFormatter = require('./responseFormatters/listFormatter');
+const helpResponse = require('./responseBuilders/helpResponse');
+const balanceResponse = require('./responseBuilders/balanceResponse');
+const addTransactionsResponse = require('./responseBuilders/addTransactionsResponse');
+const transactionsWithUserResponse = require('./responseBuilders/transactionsWithUserResponse');
 
 module.exports = async function handleSlackRequest(req, res, next) {
   const params = { ...req.textParams, reqUser: req.user, domain: req.domain };
 
   if (params.service === 'BALANCE') {
-    let data;
+    let responseData;
     try {
       const { domain, reqUser } = params;
-      data = await balance(domain, reqUser);
-      data = balanceFormatter(data);
+      const balanceWithUsers = await balance(domain, reqUser);
+      responseData = balanceResponse(balanceWithUsers);
     } catch (error) {
       return next(error);
     }
-    return res.send(data);
+    return res.send(responseData);
   }
 
   if (params.service === 'HELP') {
-    return res.send(helpFormatter(helpText));
+    return res.send(helpResponse(helpText));
   }
 
   if (params.service === 'CREATE_TRANSACTIONS') {
@@ -39,32 +40,37 @@ module.exports = async function handleSlackRequest(req, res, next) {
       })),
     );
 
-    let data;
+    let responseData;
     try {
-      data = await createTransactions(
+      const data = await createTransactions(
         domain,
         reqUser,
         userAmountPairs,
         description,
       );
-      data = newTransactionFormatter(data);
+      responseData = addTransactionsResponse(data);
     } catch (error) {
       return next(error);
     }
-    return res.send(data);
+    return res.send(responseData);
   }
 
   if (params.service === 'LIST_TRANSACTIONS') {
-    let data;
+    let responseData;
     try {
       const { domain, reqUser, user } = params;
       const otherUser = await User.findUpsert(domain, user);
-      data = await list(domain, reqUser, otherUser);
-      data = listFormatter(otherUser, data.transactions, data.balance);
+      const data = await transactionsWithUser(domain, reqUser, otherUser);
+      responseData = transactionsWithUserResponse(
+        reqUser,
+        otherUser,
+        data.transactions,
+        data.balance,
+      );
     } catch (error) {
       return next(error);
     }
-    return res.send(data);
+    return res.send(responseData);
   }
 
   const usageHelp = 'Use `/ledger help` for usage instructions.';

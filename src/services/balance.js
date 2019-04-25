@@ -7,9 +7,13 @@ module.exports = async function balance(domain, reqUser) {
   const [creditTransactions, debtTransactions] = await Promise.all([
     Transaction.find({ domain, creditor: reqUser.id })
       .sort({ _id: 1 })
-      .populate({ path: 'debtor', model: User }),
+      .populate({ path: 'creator', model: User })
+      .populate({ path: 'debtor', model: User })
+      .populate({ path: 'creditor', model: User }),
     Transaction.find({ domain, debtor: reqUser.id })
       .sort({ _id: 1 })
+      .populate({ path: 'creator', model: User })
+      .populate({ path: 'debtor', model: User })
       .populate({ path: 'creditor', model: User }),
   ]);
 
