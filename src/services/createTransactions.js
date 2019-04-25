@@ -15,6 +15,7 @@ module.exports = async function createTransactions(
     if (user.slackId === reqUser.slackId) {
       return null; // null transaction if other user is also self
     }
+    const creator = reqUser;
     let debtor;
     let creditor;
     if (amount > 0) {
@@ -26,6 +27,7 @@ module.exports = async function createTransactions(
     }
     return new Transaction({
       domain,
+      creator,
       debtor,
       creditor,
       amount: Math.abs(amount),

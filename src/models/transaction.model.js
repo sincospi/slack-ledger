@@ -4,6 +4,11 @@ const Big = require('big.js');
 const schema = Mongoose.Schema(
   {
     domain: { type: String, required: true, index: true },
+    creator: {
+      type: Mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     debtor: {
       type: Mongoose.Schema.Types.ObjectId,
       ref: 'User',

@@ -27,6 +27,7 @@ describe('createTransactions Service', () => {
       [userAmount],
       'test single transaction',
     );
+    expect(transactions[0].creator.slackId).to.be('1');
     expect(transactions[0].creditor.slackId).to.be('1');
     expect(transactions[0].debtor.slackId).to.be('2');
     expect(transactions[0].amount).to.be(2);

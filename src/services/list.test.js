@@ -19,11 +19,11 @@ describe('list Service', () => {
     );
     Object.assign(x, { u1, u2 });
     const transactions = [
-      { domain, debtor: u1, creditor: u2, amount: 3, description: 'test-1' },
-      { domain, debtor: u2, creditor: u1, amount: 5, description: 'test-2' },
-      { domain, debtor: u1, creditor: u2, amount: 7, description: 'test-3' },
-      { domain, debtor: u2, creditor: u1, amount: 1, description: 'test-4' },
-      { domain, debtor: u1, creditor: u2, amount: 11, description: 'test-5' },
+      { domain, creator: u1, debtor: u1, creditor: u2, amount: 3, description: 'test-1' },
+      { domain, creator: u2, debtor: u2, creditor: u1, amount: 5, description: 'test-2' },
+      { domain, creator: u1, debtor: u1, creditor: u2, amount: 7, description: 'test-3' },
+      { domain, creator: u2, debtor: u2, creditor: u1, amount: 1, description: 'test-4' },
+      { domain, creator: u1, debtor: u1, creditor: u2, amount: 11, description: 'test-5' },
     ];
     await Promise.all(transactions.map(async t => new Transaction(t).save()));
   });

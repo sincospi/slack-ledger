@@ -12,8 +12,9 @@ describe('Transaction model', () => {
     const user2 = new User({ encodedName: 'u2', slackId: '2' });
     const t = new Transaction({
       domain: x.domain,
-      debtor: user1._id, // eslint-disable-line no-underscore-dangle
-      creditor: user2._id, // eslint-disable-line no-underscore-dangle
+      creator: user1,
+      debtor: user1,
+      creditor: user2,
       amount: 1,
       description: 'test',
     });

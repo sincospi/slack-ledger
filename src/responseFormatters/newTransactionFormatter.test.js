@@ -10,16 +10,21 @@ x.domain = 'test';
 
 describe('newTransactionsFormatter', () => {
   beforeEach(async () => {
+    const { domain } = x;
     [x.u1, x.u2, x.u3] = ['<@1|u1>', '<@2|u2>', '<@3|u3>'].map(
       u => new User(User.fromEncodedName(x.domain, u)),
     );
     x.t1 = new Transaction({
+      domain,
+      creator: x.u1,
       debtor: x.u1,
       creditor: x.u2,
       amount: 2,
       description: 'transaction 1',
     });
     x.t2 = new Transaction({
+      domain,
+      creator: x.u1,
       debtor: x.u3,
       creditor: x.u1,
       amount: 3,

@@ -11,6 +11,7 @@ module.exports = async function list(domain, reqUser, otherUser) {
   };
   const transactions = await Transaction.find(q)
     .sort({ _id: 1 })
+    .populate({ path: 'creator', model: User })
     .populate({ path: 'debtor', model: User })
     .populate({ path: 'creditor', model: User });
 
