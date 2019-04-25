@@ -31,6 +31,27 @@ describe('parseTextCommand service', () => {
     expect(service).to.be('CREATE_TRANSACTIONS');
   });
 
+  it('should recognise amounts witn comma decimal point for CREATE_TRANSACTIONS', () => {
+    const text = `<@U12313|sincospi_u2> 1,1`;
+    const { service, userAmounts } = parseTextCommand(text);
+    expect(service).to.be('CREATE_TRANSACTIONS');
+    expect(userAmounts[0].amount).to.eql(1.1);
+  });
+
+  it('should recognise -ve amounts for CREATE_TRANSACTIONS', () => {
+    const text = `<@U12313|sincospi_u2> -1`;
+    const { service, userAmounts } = parseTextCommand(text);
+    expect(service).to.be('CREATE_TRANSACTIONS');
+    expect(userAmounts[0].amount).to.eql(-1);
+  });
+
+  it('should recognise +ve amounts with explicit + sign for CREATE_TRANSACTIONS', () => {
+    const text = `<@U12313|sincospi_u2> +1`;
+    const { service, userAmounts } = parseTextCommand(text);
+    expect(service).to.be('CREATE_TRANSACTIONS');
+    expect(userAmounts[0].amount).to.eql(1);
+  });
+
   it('should parse user amount and description', () => {
     const text = `<@U12313|sincospi_u2> 1 bla bla`;
     const { userAmounts, description } = parseTextCommand(text);

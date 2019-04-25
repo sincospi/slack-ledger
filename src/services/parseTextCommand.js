@@ -1,5 +1,5 @@
 const userRegex = /<@[^>]+>/;
-const userAmountPairRegex = /(<@[^>]+>)\s+(-?\d+[.,\d]*)/;
+const userAmountPairRegex = /(<@[^>]+>)\s+([+-]?\d+[.,\d]*)/;
 
 function parseTextCommand(textCommand) {
   const params = {};
