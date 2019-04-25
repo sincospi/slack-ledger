@@ -10,6 +10,7 @@ const helpResponse = require('./responseBuilders/helpResponse');
 const balanceResponse = require('./responseBuilders/balanceResponse');
 const addTransactionsResponse = require('./responseBuilders/addTransactionsResponse');
 const transactionsWithUserResponse = require('./responseBuilders/transactionsWithUserResponse');
+const allUserTransactionsResponse = require('./responseBuilders/allUserTransactionsResponse');
 
 module.exports = async function handleSlackRequest(req, res, next) {
   const params = { ...req.textParams, reqUser: req.user, domain: req.domain };
@@ -28,6 +29,18 @@ module.exports = async function handleSlackRequest(req, res, next) {
 
   if (params.service === 'HELP') {
     return res.send(helpResponse(helpText));
+  }
+
+  if (params.service === 'TAIL') {
+    let responseData;
+    try {
+      const { domain } = params;
+      const transactions = await lastTransactions(domain, null, 30);
+      responseData = allUserTransactionsResponse(transactions);
+    } catch (error) {
+      return next(error);
+    }
+    return res.send(responseData);
   }
 
   if (params.service === 'CREATE_TRANSACTIONS') {

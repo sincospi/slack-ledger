@@ -13,6 +13,11 @@ describe('parseTextCommand service', () => {
     expect(service).to.be('HELP');
   });
 
+  it('should assign TAIL service if text command is tail', () => {
+    const { service } = parseTextCommand('tail');
+    expect(service).to.be('TAIL');
+  });
+
   it('should assign LIST_TRANSACTIONS service if text command mentions single username', () => {
     const text = `<@U12313|sincospi_u2>`;
     const { user, service } = parseTextCommand(text);

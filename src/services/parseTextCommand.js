@@ -18,6 +18,12 @@ function parseTextCommand(textCommand) {
     return params;
   }
 
+  m = text.match(/tail/i);
+  if (m) {
+    params.service = 'TAIL';
+    return params;
+  }
+
   m = text.match(userAmountPairRegex);
   if (m) {
     params.service = 'CREATE_TRANSACTIONS';

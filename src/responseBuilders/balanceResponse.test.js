@@ -2,7 +2,6 @@
 const Big = require('big.js');
 
 const User = require('../models/user.model');
-const Transaction = require('../models/transaction.model');
 
 const balanceResponse = require('./balanceResponse');
 
