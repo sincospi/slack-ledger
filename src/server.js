@@ -7,21 +7,21 @@ if (process.env.NODE_ENV) {
   throw new Error('process.env.NODE_ENV is not defined!');
 }
 
-const config = require('./config');
-require('./src/mongooseConnect');
+const config = require('../config');
+require('./mongooseConnect');
 
 // Middleware
-const customisedBodyParser = require('./src/middleware/bodyParser');
-const logRawRequestBody = require('./src/middleware/logRawRequestBody');
-const verifySlackRequest = require('./src/middleware/verifySlackRequest');
-const setRequestDomain = require('./src/middleware/setRequestDomain');
-const setRequestUser = require('./src/middleware/setRequestUser');
-const setRequestTextParams = require('./src/middleware/setRequestTextParams');
-const errorHandler = require('./src/middleware/errorHandler');
-const logRequest = require('./src/middleware/logRequest');
+const customisedBodyParser = require('./middleware/bodyParser');
+const logRawRequestBody = require('./middleware/logRawRequestBody');
+const verifySlackRequest = require('./middleware/verifySlackRequest');
+const setRequestDomain = require('./middleware/setRequestDomain');
+const setRequestUser = require('./middleware/setRequestUser');
+const setRequestTextParams = require('./middleware/setRequestTextParams');
+const errorHandler = require('./middleware/errorHandler');
+const logRequest = require('./middleware/logRequest');
 
 // Controllers
-const handleSlackRequest = require('./src/handleSlackRequest');
+const handleSlackRequest = require('./handleSlackRequest');
 
 const app = express();
 app.use(customisedBodyParser);

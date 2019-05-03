@@ -53,7 +53,7 @@ provider:
 
 functions:
   app:
-    handler: server.handler
+    handler: built/server.handler
     environment:
       NODE_ENV: production
     events:
